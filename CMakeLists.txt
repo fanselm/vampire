@@ -1,21 +1,75 @@
-target_sources(vampire PRIVATE
-    cubic_fourth_order.cpp
-    cubic_fourth_order_rotation.cpp
-    cubic_sixth_order.cpp
-    data.cpp
-    energy.cpp
-    fields.cpp
-    get_anisotropy.cpp
-    identify_surface_atoms.cpp
-    initialize.cpp
-    initialize_neel.cpp
-    interface.cpp
-    lattice.cpp
-    neel.cpp
-    rotational_fixed_basis.cpp
-    uniaxial_second_order.cpp
-    uniaxial_fourth_order.cpp
-    biaxial_fourth_order_simple.cpp
-    uniaxial_sixth_order.cpp
-    triaxial_fixed_basis.cpp
-    triaxial_rotational.cpp)
+cmake_minimum_required(VERSION 3.15)
+
+project(Vampire LANGUAGES CXX)
+
+# Require C++11 and disable extensions for all targets
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# Define the main executable target and specify sources.
+add_executable(vampire
+    src/main/main.cpp
+    src/main/version.cpp
+    src/main/command.cpp
+    src/main/githash.cpp
+    src/main/initialise_variables.cpp
+    src/main/material.cpp)
+
+target_include_directories(vampire PRIVATE hdr)
+
+add_subdirectory(src/anisotropy)
+add_subdirectory(src/cells)
+add_subdirectory(src/config)
+add_subdirectory(src/constants)
+add_subdirectory(src/create)
+add_subdirectory(src/data)
+add_subdirectory(src/dipole)
+add_subdirectory(src/environment)
+add_subdirectory(src/exchange)
+add_subdirectory(src/gpu)
+add_subdirectory(src/hamr)
+add_subdirectory(src/hierarchical)
+add_subdirectory(src/ltmp)
+add_subdirectory(src/micromagnetic)
+add_subdirectory(src/montecarlo)
+add_subdirectory(src/mpi)
+add_subdirectory(src/neighbours)
+add_subdirectory(src/program)
+add_subdirectory(src/qvoronoi)
+add_subdirectory(src/random)
+add_subdirectory(src/simulate)
+add_subdirectory(src/spintorque)
+add_subdirectory(src/spintransport)
+add_subdirectory(src/statistics)
+add_subdirectory(src/unitcell)
+add_subdirectory(src/utility)
+add_subdirectory(src/vio)
+
+#add_subdirectory(src/cuda)
+#add_subdirectory(src/opencl)
+
+# Compiler specific flags and options,
+# see: https://stackoverflow.com/questions/10046114/in-cmake-how-can-i-test-if-the-compiler-is-clang
+# and: https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_ID.html
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    set(WARNING_FLAGS -Wall)
+    set(OPT_FLAGS "")
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    set(WARNING_FLAGS /Wall)
+    set(OPT_FLAGS "")
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
+    set(WARNING_FLAGS -Wall)
+    set(OPT_FLAGS "")
+endif()
+
+# Set warning options.
+target_compile_options(vampire PRIVATE ${WARNING_FLAGS})
+
+# Set optimization options.
+target_compile_options(vampire PRIVATE $<$<OR:$<CONFIG:Release>,$<CONFIG:RelWithDebInfo>>:${OPT_FLAGS}>)
+
+# Define installation rules.
+# Use GNU installation layout, i.e. 'bin', 'lib', 'include', ... folders.
+include(GNUInstallDirs)
+install(TARGETS vampire)

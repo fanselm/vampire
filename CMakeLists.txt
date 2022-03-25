@@ -69,6 +69,10 @@ target_compile_options(vampire PRIVATE ${WARNING_FLAGS})
 # Set optimization options.
 target_compile_options(vampire PRIVATE $<$<OR:$<CONFIG:Release>,$<CONFIG:RelWithDebInfo>>:${OPT_FLAGS}>)
 
+if(WIN32)
+    target_compile_definitions(vampire PRIVATE WIN_COMPILE)
+endif()
+
 # Define installation rules.
 # Use GNU installation layout, i.e. 'bin', 'lib', 'include', ... folders.
 include(GNUInstallDirs)

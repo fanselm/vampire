@@ -65,7 +65,7 @@ namespace program
    extern void effective_damping();
    extern void fmr();
 	extern void tracks();
-	extern void field_sweep();
+	extern int field_sweep();
 	extern void fmr();
    extern void domain_wall();
    extern void mm_A_calculation();

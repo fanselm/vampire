@@ -70,7 +70,7 @@ target_compile_options(vampire PRIVATE ${WARNING_FLAGS})
 target_compile_options(vampire PRIVATE $<$<OR:$<CONFIG:Release>,$<CONFIG:RelWithDebInfo>>:${OPT_FLAGS}>)
 
 if(WIN32)
-    target_compile_definitions(vampire PRIVATE WIN_COMPILE)
+    target_compile_definitions(vampire PRIVATE WIN_COMPILE _USE_MATH_DEFINES NOMINMAX)
 endif()
 
 # Define installation rules.

@@ -33,6 +33,7 @@
 #include <sys/types.h>
 #ifdef WIN_COMPILE
   #include <process.h>
+  #define NOMINMAX
   #include <windows.h>
 #else
   #include <unistd.h>

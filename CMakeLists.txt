@@ -58,6 +58,8 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     set(WARNING_FLAGS /Wall)
     set(OPT_FLAGS "")
+    # On MSVC we need to define _USE_MATH_DEFINES to get macros like M_PI
+    target_compile_definitions(vampire PRIVATE _USE_MATH_DEFINES)
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
     set(WARNING_FLAGS -Wall)
     set(OPT_FLAGS "")
@@ -70,7 +72,7 @@ target_compile_options(vampire PRIVATE ${WARNING_FLAGS})
 target_compile_options(vampire PRIVATE $<$<OR:$<CONFIG:Release>,$<CONFIG:RelWithDebInfo>>:${OPT_FLAGS}>)
 
 if(WIN32)
-    target_compile_definitions(vampire PRIVATE WIN_COMPILE _USE_MATH_DEFINES)
+    target_compile_definitions(vampire PRIVATE WIN_COMPILE)
 endif()
 
 # Define installation rules.

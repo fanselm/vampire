@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.15)
 
 project(Vampire LANGUAGES CXX)
 
+option(ENABLE_OPENMP "Compile with OpenMP parallelization" ON)
 option(ENABLE_MPI "Compile and link with MPI support" ON)
 
 # Require C++11 and disable extensions for all targets
@@ -75,6 +76,11 @@ target_compile_options(vampire PRIVATE $<$<OR:$<CONFIG:Release>,$<CONFIG:RelWith
 
 if(WIN32)
     target_compile_definitions(vampire PRIVATE WIN_COMPILE)
+endif()
+
+if(ENABLE_OPENMP)
+    find_package(OpenMP REQUIRED)
+    target_link_libraries(vampire PUBLIC OpenMP::OpenMP_CXX)
 endif()
 
 if(ENABLE_MPI)

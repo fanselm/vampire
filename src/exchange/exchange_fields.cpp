@@ -50,6 +50,7 @@ namespace internal{
    		case exchange::isotropic:
 
             // loop over all atoms
+            #pragma omp parallel for
    			for(int atom = start_index; atom < end_index; ++atom){
 
                // temporary variables (registers) to calculate intermediate sum
@@ -83,6 +84,7 @@ namespace internal{
    		case exchange::vectorial: // vector
 
             // loop over all atoms
+            #pragma omp parallel for
             for(int atom = start_index; atom < end_index; ++atom){
 
                // temporary variables (registers) to calculate intermediate sum
@@ -120,6 +122,7 @@ namespace internal{
    		case exchange::tensorial: // tensor
 
             // loop over all atoms
+            #pragma omp parallel for
             for(int atom = start_index; atom < end_index; ++atom){
 
                // temporary variables (registers) to calculate intermediate sum

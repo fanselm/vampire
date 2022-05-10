@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.15)
 
 project(Vampire LANGUAGES CXX)
 
+option(ENABLE_MPI "Compile and link with MPI support" ON)
+
 # Require C++11 and disable extensions for all targets
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -73,6 +75,12 @@ target_compile_options(vampire PRIVATE $<$<OR:$<CONFIG:Release>,$<CONFIG:RelWith
 
 if(WIN32)
     target_compile_definitions(vampire PRIVATE WIN_COMPILE)
+endif()
+
+if(ENABLE_MPI)
+    find_package(MPI REQUIRED)
+    target_link_libraries(vampire PUBLIC MPI::MPI_CXX)
+    target_compile_definitions(vampire PRIVATE MPICF)
 endif()
 
 # Define installation rules.
